@@ -130,9 +130,12 @@ class SpriteSheet:
 
             images.append([img])
 
-        # TODO: truncate width to only needed width for images + border
+        # Truncate width to only needed width for images + border
+        actual_width = max(
+            (SpriteSheet.calc_row_width(row, border_width) for row in images)
+        )
 
-        return SpriteSheet(images, width, border_width)
+        return SpriteSheet(images, actual_width, border_width)
 
     @staticmethod
     def calc_row_width(row: List[PIL.Image.Image], border_width: int) -> int:
