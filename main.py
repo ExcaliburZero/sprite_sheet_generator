@@ -101,7 +101,7 @@ class SpriteSheet:
 
     @property
     def height(self) -> int:
-        border_spacing = self.border_width * len(self.images)
+        border_spacing = self.border_width * (len(self.images) + 1)
         image_spacing = 0
         for row in self.images:
             image_spacing += max((img.height for img in row))
