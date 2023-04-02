@@ -1,0 +1,8 @@
+name: sprite_sheet_generator
+dependencies:
+  - python=3
+  - pip
+  - pip:
+      - pillow
+      - black
+      - mypy
