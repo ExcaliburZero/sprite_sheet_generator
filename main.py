@@ -60,7 +60,7 @@ class SpriteSheet:
 
     def __paste_images(self, output_image: PIL.Image.Image) -> None:
         current_height = self.border_width
-        for r, row in enumerate(self.images):
+        for row in self.images:
             current_width = self.border_width
             for image in row:
                 location = (current_width, current_height)
@@ -74,53 +74,29 @@ class SpriteSheet:
     def __add_borders(self, output_image: PIL.Image.Image, border_color: Color) -> None:
         draw = PIL.ImageDraw.Draw(output_image)
 
-        current_height = 0
-        for r, row in enumerate(self.images):
-            row_height = SpriteSheet.calc_row_image_height(row)
-
+        current_height = self.border_width
+        for row in self.images:
             current_width = self.border_width
             for image in row:
-                next_width = current_width + image.width + self.border_width
+                location = (current_width, current_height)
+                output_image.paste(image, location)
 
-                # Draw vertical borders
-                draw.rectangle(
-                    (
-                        current_width - self.border_width,
-                        current_height,
-                        current_width,
-                        self.border_width + current_height + image.height,
-                    ),
-                    fill=border_color,
-                )
-                draw.rectangle(
-                    (
-                        next_width - self.border_width,
-                        current_height,
-                        next_width,
-                        self.border_width + current_height + image.height,
-                    ),
-                    fill=border_color,
+                dimensions = (
+                    current_width - self.border_width,
+                    current_height - self.border_width,
+                    current_width + image.width,
+                    current_height + image.height,
                 )
 
-                # Draw bottom horizontal border
                 draw.rectangle(
-                    (
-                        current_width,
-                        current_height + image.height + self.border_width,
-                        next_width,
-                        2 * self.border_width + current_height + image.height,
-                    ),
-                    fill=border_color,
+                    dimensions,
+                    width=self.border_width,
+                    outline=border_color,
                 )
 
-                current_width = next_width
+                current_width += image.width + self.border_width
 
-            # Draw top vertical border
-            draw.rectangle(
-                (0, current_height, current_width, self.border_width + current_height),
-                fill=border_color,
-            )
-
+            row_height = SpriteSheet.calc_row_image_height(row)
             current_height += row_height + self.border_width
 
     @property
